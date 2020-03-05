@@ -50,19 +50,55 @@ bool bst::deleteVal(int val) {
 // POSTCONDITION: if val != in bst return false, else delete val & return true
 	node *n = access_helper(val, root);
 	if (!n) return false;
-	node *tmp;
-	// if none or one child
-	if (!n->left) {
-		tmp = n->right;  // may be nullptr;
-		delete n;
+
+	bool isAleftChild(false), isArightChild(false);
+	node *p = n->parent;
+	if (p) {
+		if (p->left && p->left->data==val) isAleftChild=true;
+		else isArightChild=true;
 	}
-	return false;  // THIS IS A STUB
+
+	// if no children
+	if (!n->left && !n->right) {  // if no children
+		if (isAleftChild) p->left = nullptr;
+		else if (isArightChild) p->right = nullptr;
+		else root = nullptr;
+	} else if (n->left && n->right) {  // if 2 children
+		node *s = findSuccessor(n);  // s must exist since n has 2 children
+		int sVal = s->data;
+		int sHeight = s->height;
+		deleteVal(s->data);
+		n->data = sVal;  // swap values of n and n's successor
+		n->height = sHeight;  // if avl
+		return true;
+	} else if (n->left) {  // if 1 child (left)
+		if (isAleftChild) p->left = n->left;
+		else if (isArightChild) p->right = n->left;
+		else root = n->left;
+		n->left->parent = p;
+	} else {  // if 1 child (right)
+		if (isAleftChild) p->left = n->right;
+		else if (isArightChild) p->right = n->right;
+		else root = n->right;
+		n->right->parent = p;
+	}
+
+	delete n;
+	return true;
 }
+node* bst::findSuccessor(node *n) {
+// PRECONDITION: n exists and has 2 children
+// POSTCONDITION: returns n's successor (greater node than n w/ least value in bst)
+	n = n->right;
+	while (n->left) n=n->left;
+	return n;
+}
+
 
 string bst::print() { 
 // POSTCONDITION: if empty, returns "Empty tree"
 // else returns string with pre-order,in-order,post-order w/ "\n" inbetween
-	if (!root) return "Empty tree";
+	if (!root) return "Empty tree\n";
 	string str = "";
 	str += print_preorder();
 	str += print_inorder();

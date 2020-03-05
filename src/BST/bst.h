@@ -20,6 +20,7 @@ class bst {
 
 		bool insert_helper(int val, node *n);
 		node* access_helper(int val, node *n);
+		node* findSuccessor(node *n);
 		std::string print_preorder();
 		std::string print_inorder();
 		std::string print_postorder();
