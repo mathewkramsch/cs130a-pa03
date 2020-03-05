@@ -8,15 +8,17 @@
 class bst {
 	public:
 		bst(): root(0) {}
-		~bst();
+		~bst() { clear(root); }
 		
-		bool insert(int val);  // true=inserted, false= val already present
-		bool access(int val);  // true=found, false= not found
-		bool deleteVal(int val);  // true=deleted, false= not found
-		std::string print();  // returns "Empty tree" or prints pre-order,in-order,post-order
+		bool insert(int val);
+		bool access(int val);
+		bool deleteVal(int val);
+		std::string print();
 
 	private:
 		node *root;
+
+		void clear(node *n);
 };
 
 #endif

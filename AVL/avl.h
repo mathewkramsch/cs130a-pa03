@@ -8,7 +8,7 @@
 class avl {
 	public:
 		avl(): root(0) {}
-		~avl();
+		~avl() { clear(root); }
 
 		bool insert(int val);
 		bool access(int val);
@@ -17,6 +17,8 @@ class avl {
 
 	private:
 		node *root;
+
+		void clear(node *n);
 };
 
 #endif
