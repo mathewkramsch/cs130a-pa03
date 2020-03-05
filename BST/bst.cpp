@@ -57,7 +57,7 @@ string bst::print() {
 	string str = "";
 	str += print_preorder();
 	str += print_inorder();
-	// str += print_postorder();
+	str += print_postorder();
 	return str;
 }
 string bst::print_preorder() {
@@ -65,9 +65,10 @@ string bst::print_preorder() {
 // POSTCONDITION: returns string with pre-order w/ "\n" at end
 	string str = "";
 	stack<node *> s;
+	node *n;
 	s.push(root);
 	while (!s.empty()) {
-		node *n = s.top();  // make n = to current (root)
+		n = s.top();  // make n = to current (root)
 		s.pop();  // pop off top of stack
 		str += to_string(n->data) + " ";
 
@@ -100,7 +101,24 @@ string bst::print_inorder() {
 string bst::print_postorder() {
 // PRECONDITION: tree is not empty
 // POSTCONDITION: returns string with post-order w/ "\n" at end
-	return "poo";
+	string str = "";
+	stack<node *> s1, s2;
+	s1.push(root);
+	node *n;
+	while (!s1.empty()) {
+		n = s1.top();
+		s1.pop();
+		s2.push(n);
+		if (n->left) s1.push(n->left);  // can do left->right bc 2nd stack flips order
+		if (n->right) s1.push(n->right);
+	}
+	while(!s2.empty()) {
+		n = s2.top();
+		s2.pop();
+		str += to_string(n->data) + " ";
+	}
+	str += "\n";
+	return str;
 }
 
 void bst::clear(node *n) {  // helper function for destructor
