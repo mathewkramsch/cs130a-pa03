@@ -27,8 +27,8 @@ int main(int argc, char *argv[]) {
 
 	while (ss >> word) {
 		if (word=="print," || word=="print") { 
-			if (type=="bst") cout << b.print() << endl; 
-			else cout << a.print() << endl;
+			if (type=="bst") cout << b.print(); 
+			else cout << a.print();
 			continue; 
 		}
 

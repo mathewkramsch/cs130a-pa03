@@ -2,6 +2,7 @@
 
 #include "bst.h"
 #include <iostream>  // DELETE, JUST FOR DEBUGGING
+#include <stack>
 using namespace std;
 
 bool bst::insert(int val) { 
@@ -50,9 +51,43 @@ bool bst::deleteVal(int val) {
 }
 
 string bst::print() { 
-// POSTCONDITION: if emptyl, returns "Empty tree"
-// else returns string with pre-order,in-order,post-order w/ \n inbetween
-	return "stub"; 
+// POSTCONDITION: if empty, returns "Empty tree"
+// else returns string with pre-order,in-order,post-order w/ "\n" inbetween
+	if (!root) return "Empty tree";
+	string str = "";
+	str += print_preorder();
+	// str += print_inorder();
+	// str += print_postorder();
+	return str;
+}
+string bst::print_preorder() {
+// PRECONDITION: tree is not empty
+// POSTCONDITION: returns string with pre-order w/ "\n" at end
+	string str = "";
+	stack<node *> s;
+	s.push(root);
+	while (!s.empty()) {
+		node *n = s.top();  // make n = to current (root)
+		s.pop();  // pop off top of stack
+		str += to_string(n->data) + " ";
+
+		if (n->right) s.push(n->right);  // push right first (backwards bc stack)
+		if (n->left) s.push(n->left);  // then push left
+	}
+	str += "\n";
+	return str;
+
+}
+
+string bst::print_inorder() {
+// PRECONDITION: tree is not empty
+// POSTCONDITION: returns string with in-order w/ "\n" at end
+	return "poo";
+}
+string bst::print_postorder() {
+// PRECONDITION: tree is not empty
+// POSTCONDITION: returns string with post-order w/ "\n" at end
+	return "poo";
 }
 
 void bst::clear(node *n) {  // helper function for destructor
