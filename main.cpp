@@ -13,9 +13,10 @@ int main(int argc, char *argv[]) {
 	avl a;
 	bst b;
 
+	string nameOfExcecutable = argv[0];
 	string type;
-	if (argv[0]=="./bst") type="bst";
-	else if (argv[0]=="./avl") type="avl";
+	if (nameOfExcecutable=="./bst") type="bst";
+	else if (nameOfExcecutable=="./avl") type="avl";
 
 	stringstream ss(argv[1]);
 	string word="";  // to get word input

@@ -18,6 +18,8 @@ class bst {
 	private:
 		node *root;
 
+		bool insert_helper(int al, node *n);
+		bool access_helper(int val, node *n);
 		void clear(node *n);
 };
 
