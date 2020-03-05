@@ -9,22 +9,23 @@ bool bst::insert(int val) {
 // PRECONDITION: val is the value to be inserted to bst
 // POSTCONDITION: if val already in bst returns false, else inserts val & returns true
 	if (!root) {
-		root = new node(val);
+		root = new node(val,0);
 		return true;
 	}
-	return insert_helper(val,root);
+	return insert_helper(val,root,0);
 }
-bool bst::insert_helper(int val, node *n) {
+bool bst::insert_helper(int val, node *n, int height) {
 // PRECONDITION: val = value to be inserted to bst, n = root of tree/subtree (may = nullptr)
 // POSTCONDITION: if val already in bst returns false, else inserts val & returns true
 	if (val == n->data) return false;
+	height++;
 	if (val < n->data) {
-		if (n->left) return insert_helper(val,n->left);
-		else { n->left = new node(val); n->left->parent = n; }
+		if (n->left) return insert_helper(val,n->left,height);
+		else { n->left = new node(val,height); n->left->parent = n; }
 	}
 	else if (val > n->data) {
-		if (n->right) return insert_helper(val,n->right);
-		else { n->right = new node(val); n->right->parent = n; }
+		if (n->right) return insert_helper(val,n->right,height);
+		else { n->right = new node(val,height); n->right->parent = n; }
 	}
 	return true;
 }

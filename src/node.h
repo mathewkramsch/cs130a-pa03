@@ -4,7 +4,7 @@
 #define NODE_H
 
 struct node {
-	node (int d=0, int h=-1): data(d), height(h) {left=right=parent=0;}
+	node (int d, int h): data(d), height(h) {left=right=parent=0;}
 	int data;
 	int height;  // only care about for avl tree
 	node *left;
