@@ -2,12 +2,18 @@
 
 CXX=g++
 FLAGS=-std=c++11 -Wall -Wextra -Werror
-DEPENDENCIES= main.o BST/bst.o AVL/avl.o
+DEPENDENCIES= src/main.o src/BST/bst.o src/AVL/avl.o
 
-all: bst avl
+all: obj bst avl cleanup
+
 bst: ${DEPENDENCIES}
 	${CXX} $^ ${FLAGS} -o $@
 avl: ${DEPENDENCIES}
 	${CXX} $^ ${FLAGS} -o $@
+
+obj:
+	mkdir obj
+cleanup:
+	mv src/*.o src/AVL/*.o src/BST/*.o -t obj
 clean:
-	/bin/rm -f *.o BST/*.o AVL/*.o avl bst vgcore*
+	/bin/rm -f -r obj avl bst vgcore*

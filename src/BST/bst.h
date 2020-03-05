@@ -15,11 +15,11 @@ class bst {
 		bool deleteVal(int val);
 		std::string print();
 
-	private:
+	protected:
 		node *root;
 
-		bool insert_helper(int al, node *n);
-		bool access_helper(int val, node *n);
+		bool insert_helper(int val, node *n);
+		node* access_helper(int val, node *n);
 		std::string print_preorder();
 		std::string print_inorder();
 		std::string print_postorder();

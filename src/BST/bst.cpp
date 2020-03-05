@@ -32,13 +32,14 @@ bool bst::insert_helper(int val, node *n) {
 bool bst::access(int val) { 
 // PRECONDITION: val = to be checked if in bst
 // POSTCONDITION: if val in bst return true, else return false
-	return access_helper(val,root); 
+	if (access_helper(val,root)) return true;
+	else return false;
 }
-bool bst::access_helper(int val, node *n) {
+node* bst::access_helper(int val, node *n) {
 // PRECONDITION: val = to be checked if in bst, n = root of tree/subtree
-// POSTCONDITION: if val in bst return true, else return false
-	if (!n) return false;
-	if (val == n->data) return true;
+// POSTCONDITION: if val in bst returns node, else return nullptr
+	if (!n) return nullptr;
+	if (val == n->data) return n;
 	if (val < n->data) return access_helper(val, n->left);
 	return access_helper(val, n->right);
 
@@ -47,7 +48,15 @@ bool bst::access_helper(int val, node *n) {
 bool bst::deleteVal(int val) { 
 // PRECONDITION: val = to be deleted from bst
 // POSTCONDITION: if val != in bst return false, else delete val & return true
-	return false; 
+	node *n = access_helper(val, root);
+	if (!n) return false;
+	node *tmp;
+	// if none or one child
+	if (!n->left) {
+		tmp = n->right;  // may be nullptr;
+		delete n;
+	}
+	return false;  // THIS IS A STUB
 }
 
 string bst::print() { 
