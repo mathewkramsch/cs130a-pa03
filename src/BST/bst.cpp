@@ -29,13 +29,13 @@ bool bst::insert_helper(int val, node *n) {
 	return true;
 }
 
-bool bst::access(int val) { 
+bool bst::access(int val) const { 
 // PRECONDITION: val = to be checked if in bst
 // POSTCONDITION: if val in bst return true, else return false
 	if (access_helper(val,root)) return true;
 	else return false;
 }
-node* bst::access_helper(int val, node *n) {
+node* bst::access_helper(int val, node *n) const {
 // PRECONDITION: val = to be checked if in bst, n = root of tree/subtree
 // POSTCONDITION: if val in bst returns node, else return nullptr
 	if (!n) return nullptr;
@@ -66,27 +66,27 @@ bool bst::deleteVal(int val) {
 	} else if (n->left && n->right) {  // if 2 children
 		node *s = findSuccessor(n);  // s must exist since n has 2 children
 		int sVal = s->data;
-		int sHeight = s->height;
 		deleteVal(s->data);
-		n->data = sVal;  // swap values of n and n's successor
-		n->height = sHeight;  // if avl
+		n->data = sVal;  // swap values of n and n's successor (not height)
 		return true;
 	} else if (n->left) {  // if 1 child (left)
 		if (isAleftChild) p->left = n->left;
 		else if (isArightChild) p->right = n->left;
 		else root = n->left;
 		n->left->parent = p;
+		n->left->height--;  // n->left moves up + replaces n
 	} else {  // if 1 child (right)
 		if (isAleftChild) p->left = n->right;
 		else if (isArightChild) p->right = n->right;
 		else root = n->right;
 		n->right->parent = p;
+		n->right->height--;
 	}
 
 	delete n;
 	return true;
 }
-node* bst::findSuccessor(node *n) {
+node* bst::findSuccessor(node *n) const {
 // PRECONDITION: n exists and has 2 children
 // POSTCONDITION: returns n's successor (greater node than n w/ least value in bst)
 	n = n->right;
@@ -95,7 +95,7 @@ node* bst::findSuccessor(node *n) {
 }
 
 
-string bst::print() { 
+string bst::print() const { 
 // POSTCONDITION: if empty, returns "Empty tree"
 // else returns string with pre-order,in-order,post-order w/ "\n" inbetween
 	if (!root) return "Empty tree\n";
@@ -105,7 +105,7 @@ string bst::print() {
 	str += print_postorder();
 	return str;
 }
-string bst::print_preorder() {
+string bst::print_preorder() const {
 // PRECONDITION: tree is not empty
 // POSTCONDITION: returns string with pre-order w/ "\n" at end
 	string str = "";
@@ -124,7 +124,7 @@ string bst::print_preorder() {
 	return str;
 }
 
-string bst::print_inorder() {
+string bst::print_inorder() const {
 // PRECONDITION: tree is not empty
 // POSTCONDITION: returns string with in-order w/ "\n" at end
 	string str = "";
@@ -143,7 +143,7 @@ string bst::print_inorder() {
 	str += "\n";
 	return str;
 }
-string bst::print_postorder() {
+string bst::print_postorder() const {
 // PRECONDITION: tree is not empty
 // POSTCONDITION: returns string with post-order w/ "\n" at end
 	string str = "";

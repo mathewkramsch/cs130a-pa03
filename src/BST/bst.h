@@ -11,19 +11,19 @@ class bst {
 		~bst() { clear(root); }
 		
 		bool insert(int val);
-		bool access(int val);
+		bool access(int val) const;
 		bool deleteVal(int val);
-		std::string print();
+		std::string print() const;
 
 	protected:
 		node *root;
 
 		bool insert_helper(int val, node *n);
-		node* access_helper(int val, node *n);
-		node* findSuccessor(node *n);
-		std::string print_preorder();
-		std::string print_inorder();
-		std::string print_postorder();
+		node* access_helper(int val, node *n) const;
+		node* findSuccessor(node *n) const;
+		std::string print_preorder() const;
+		std::string print_inorder() const;
+		std::string print_postorder() const;
 		void clear(node *n);
 };
 
