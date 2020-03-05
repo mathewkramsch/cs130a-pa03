@@ -56,7 +56,7 @@ string bst::print() {
 	if (!root) return "Empty tree";
 	string str = "";
 	str += print_preorder();
-	// str += print_inorder();
+	str += print_inorder();
 	// str += print_postorder();
 	return str;
 }
@@ -76,13 +76,26 @@ string bst::print_preorder() {
 	}
 	str += "\n";
 	return str;
-
 }
 
 string bst::print_inorder() {
 // PRECONDITION: tree is not empty
 // POSTCONDITION: returns string with in-order w/ "\n" at end
-	return "poo";
+	string str = "";
+	stack<node *> s;
+	node *n = root;
+	while (n || !s.empty()) {
+		while (n) {  // go all the way to the left
+			s.push(n);
+			n = n->left;
+		}
+		n = s.top();
+		s.pop();
+		str += to_string(n->data) + " ";  // print leftmost
+		n = n->right;  // go to the right
+	}
+	str += "\n";
+	return str;
 }
 string bst::print_postorder() {
 // PRECONDITION: tree is not empty
