@@ -18,7 +18,7 @@ class bst {
 	protected:
 		node *root;
 
-		bool insert_helper(int val, node *n);
+		bool insert_helper(int val, node *n, int height);
 		node* access_helper(int val, node *n) const;
 		node* findSuccessor(node *n) const;
 		std::string print_preorder() const;
