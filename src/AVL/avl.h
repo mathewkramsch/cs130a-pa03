@@ -13,7 +13,9 @@ class avl : public bst {
 
 	private:
 		void heightUpdate(node *n);
-		void balance();
+		void balance(node *n);
+		void leftRotate(node *n);
+		void rightRotate(node *n);
 };
 
 #endif

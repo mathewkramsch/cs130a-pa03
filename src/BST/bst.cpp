@@ -147,7 +147,7 @@ string bst::print_inorder() const {
 		n = s.top();
 		s.pop();
 		str += to_string(n->data) + " ";  // print leftmost
-		// str += "[" + to_string(n->height) + "] ";  // DELETE THIS
+		str += "[" + to_string(n->height) + "] ";  // DELETE THIS
 		n = n->right;  // go to the right
 	}
 	str += "\n";
