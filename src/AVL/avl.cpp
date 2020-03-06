@@ -52,6 +52,7 @@ void avl::balance(node *n) {
 	if (balanceFactor < -1 && n->height < 3) {  // too tall on left side (make sure dont rotate unless w/ leaf)
 		if (getBalanceFactor(n->left) < 0) rightRotate(n);  // left-left case
 		else if (getBalanceFactor(n->left) > 0) {  // left-right case
+			cout << "left-right" << endl;
 			leftRotate(n->left);
 			rightRotate(tmp);
 		}
@@ -59,6 +60,7 @@ void avl::balance(node *n) {
 	else if (balanceFactor > 1 && n->height < 3) {  // too tall on right side
 		if (getBalanceFactor(n->right) > 0) leftRotate(n);  // right-right case
 		else if (getBalanceFactor(n->right) < 0) {  // right-left case
+			cout << "right-left" << endl;
 			rightRotate(n->right);
 			leftRotate(tmp);
 		}
