@@ -47,19 +47,20 @@ void avl::balance(node *n) {
 // POSTCONDITION: avl tree is balanced: every node's |balance factor| <= 1
 	if (!n) return;
 	int balanceFactor = getBalanceFactor(n);
+	node *tmp =n;
 
 	if (balanceFactor < -1 && n->height < 3) {  // too tall on left side (make sure dont rotate unless w/ leaf)
 		if (getBalanceFactor(n->left) < 0) rightRotate(n);  // left-left case
 		else if (getBalanceFactor(n->left) > 0) {  // left-right case
 			leftRotate(n->left);
-			rightRotate(n);
+			rightRotate(tmp);
 		}
 	}
 	else if (balanceFactor > 1 && n->height < 3) {  // too tall on right side
 		if (getBalanceFactor(n->right) > 0) leftRotate(n);  // right-right case
 		else if (getBalanceFactor(n->right) < 0) {  // right-left case
 			rightRotate(n->right);
-			leftRotate(n);
+			leftRotate(tmp);
 		}
 	}
 	balance(n->left);

@@ -4,10 +4,10 @@ CXX=g++
 FLAGS=-std=c++11 -Wall -Wextra -Werror
 DEPENDENCIES= src/main.o src/BST/bst.o src/AVL/avl.o
 
-test: all
-	./avl "insert 10, insert 20, insert 30, print"
-	./bst "insert 50, insert 60, insert 40, insert 10, insert 20, insert 15, insert 30, print, delete 40, print, insert 40, insert 70, print"
-	./avl "insert 50, insert 60, insert 40, insert 10, insert 20, insert 15, insert 30, print, delete 40, print, insert 40, insert 70, print"
+#test: all
+#	./avl "insert 10, insert 20, insert 30, print"
+#	./bst "insert 50, insert 60, insert 40, insert 10, insert 20, insert 15, insert 30, print, delete 40, print, insert 40, insert 70, print"
+#	./avl "insert 50, insert 60, insert 40, insert 10, insert 20, insert 15, insert 30, print, delete 40, print, insert 40, insert 70, print"
 
 
 all: make_obj_dir bst avl cleanup
