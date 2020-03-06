@@ -1,8 +1,8 @@
 // bst.cpp
 
+#include <stack>
 #include "bst.h"
 #include <iostream>  // DELETE, JUST FOR DEBUGGING
-#include <stack>
 using namespace std;
 
 bool bst::insert(int val) { 
@@ -12,22 +12,22 @@ bool bst::insert(int val) {
 		root = new node(val,0);
 		return true;
 	}
-	return insert_helper(val,root,0);
+	if (insert_helper(val,root)) return true;
+	return false;
 }
-bool bst::insert_helper(int val, node *n, int height) {
+node* bst::insert_helper(int val, node *n) {
 // PRECONDITION: val = value to be inserted to bst, n = root of tree/subtree (may = nullptr)
-// POSTCONDITION: if val already in bst returns false, else inserts val & returns true
-	if (val == n->data) return false;
-	height++;
+// POSTCONDITION: if val already in bst returns nullptr, else inserts val & returns parent of node inserted
+	if (val == n->data) return nullptr;
 	if (val < n->data) {
-		if (n->left) return insert_helper(val,n->left,height);
-		else { n->left = new node(val,height); n->left->parent = n; }
+		if (n->left) return insert_helper(val,n->left);
+		else { n->left = new node(val); n->left->parent = n; }  // leaf node, default height=0
 	}
 	else if (val > n->data) {
-		if (n->right) return insert_helper(val,n->right,height);
-		else { n->right = new node(val,height); n->right->parent = n; }
+		if (n->right) return insert_helper(val,n->right);
+		else { n->right = new node(val); n->right->parent = n; }
 	}
-	return true;
+	return n;  // do this to help avl implementation
 }
 
 bool bst::access(int val) const { 
@@ -49,15 +49,25 @@ node* bst::access_helper(int val, node *n) const {
 bool bst::deleteVal(int val) { 
 // PRECONDITION: val = to be deleted from bst
 // POSTCONDITION: if val != in bst return false, else delete val & return true
+	pair<node*,bool> p = deleteVal_helper(val);
+	if (!p.second) return false;
+	return true;
+}
+pair<node*,bool> bst::deleteVal_helper(int val) {
+// PRECONDITION: val = to be deleted from bst
+// POSTCONDITION: .first: returns first (deepest) node to be height-updated after insert (for avl), or nullptr
+// .second: if val != in bst returns false, else delete val & return true
+	pair<node*,bool> pReturn(nullptr,false);
 	node *n = access_helper(val, root);
-	if (!n) return false;
+	if (!n) return pReturn;
+	pReturn.second = true;
 
 	bool isAleftChild(false), isArightChild(false);
 	node *p = n->parent;
 	if (p) {
 		if (p->left && p->left->data==val) isAleftChild=true;
 		else isArightChild=true;
-	}
+	} else pReturn.first = p;
 
 	// if no children
 	if (!n->left && !n->right) {  // if no children
@@ -67,25 +77,23 @@ bool bst::deleteVal(int val) {
 	} else if (n->left && n->right) {  // if 2 children
 		node *s = findSuccessor(n);  // s must exist since n has 2 children
 		int sVal = s->data;
+		pReturn.first = s->parent;
 		deleteVal(s->data);
 		n->data = sVal;  // swap values of n and n's successor (not height)
-		return true;
-	} else if (n->left) {  // if 1 child (left)
+		return pReturn;
+	} else if (n->left) {  // if 1 child: left (needs height updating)
 		if (isAleftChild) p->left = n->left;
 		else if (isArightChild) p->right = n->left;
 		else root = n->left;
 		n->left->parent = p;
-		n->left->height--;  // n->left moves up + replaces n
-	} else {  // if 1 child (right)
+	} else {  // if 1 child: right (needs height updating)
 		if (isAleftChild) p->left = n->right;
 		else if (isArightChild) p->right = n->right;
 		else root = n->right;
 		n->right->parent = p;
-		n->right->height--;
 	}
-
 	delete n;
-	return true;
+	return pReturn;
 }
 node* bst::findSuccessor(node *n) const {
 // PRECONDITION: n exists and has 2 children

@@ -12,6 +12,7 @@ class avl : public bst {
 		bool deleteVal(int val);
 
 	private:
+		void heightUpdate(node *n, bool forInsert);
 		void balance();
 };
 

@@ -4,6 +4,7 @@
 #define BST_H
 #include "../node.h"
 #include "string"
+#include <utility>
 
 class bst {
 	public:
@@ -18,8 +19,9 @@ class bst {
 	protected:
 		node *root;
 
-		bool insert_helper(int val, node *n, int height);
+		node* insert_helper(int val, node *n);
 		node* access_helper(int val, node *n) const;
+		std::pair<node*,bool> deleteVal_helper(int val);
 		node* findSuccessor(node *n) const;
 		std::string print_preorder() const;
 		std::string print_inorder() const;
