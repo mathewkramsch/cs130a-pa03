@@ -51,13 +51,15 @@ void avl::balance(node *n) {
 	if (balanceFactor < -1 && n->height < 3) {  // too tall on left side (make sure dont rotate unless w/ leaf)
 		if (getBalanceFactor(n->left) < 0) rightRotate(n);  // left-left case
 		else if (getBalanceFactor(n->left) > 0) {  // left-right case
-			cout << "left-right\n";
+			leftRotate(n->left);
+			rightRotate(n);
 		}
 	}
 	else if (balanceFactor > 1 && n->height < 3) {  // too tall on right side
 		if (getBalanceFactor(n->right) > 0) leftRotate(n);  // right-right case
 		else if (getBalanceFactor(n->right) < 0) {  // right-left case
-			cout << "right-left\n";
+			rightRotate(n->right);
+			leftRotate(n);
 		}
 	}
 	balance(n->left);
@@ -67,11 +69,49 @@ void avl::balance(node *n) {
 void avl::leftRotate(node *n) { 
 // PRECONDTION: n's |balanceFactor| > 1
 // POSTCONDITION: does a left rotation (|balanceFactor| <= 1 not guaranteed)
-	cout << "left rotate that bitch\n";
+	bool nIsAleftChild(false), nIsArightChild(false);
+	node *p = n->parent;
+	if (p) {
+		if (p->left && p->left->data==n->data) nIsAleftChild = true;
+		else if (p->right && p->right->data==n->data) nIsArightChild = true;
+	}
+
+	node *rightTmp = n->right;
+
+	n->right = n->right->left;  // may be nullptr
+	rightTmp->left = n;
+	rightTmp->parent = n->parent;
+	n->parent = rightTmp;
+
+	if (nIsAleftChild) p->left = rightTmp;
+	else if (nIsArightChild) p->right = rightTmp;
+	else root = rightTmp;
+
+	n->height = 1 + max(getHeight(n->left),getHeight(n->right));
+	rightTmp->height = 1 + max(getHeight(rightTmp->left),getHeight(rightTmp->right));
 }
 
 void avl::rightRotate(node *n) { 
 // PRECONDTION: n's |balanceFactor| > 1
 // POSTCONDITION: does a right rotation (|balanceFactor| <= 1 not guaranteed)
-	cout << "right rotate that bitch\n";
+	bool nIsAleftChild(false), nIsArightChild(false);
+	node *p = n->parent;
+	if (p) {
+		if (p->left && p->left->data==n->data) nIsAleftChild = true;
+		else if (p->right && p->right->data==n->data) nIsArightChild = true;
+	}
+
+	node *leftTmp = n->left;
+
+	n->left = n->left->right;  // may be nullptr
+	leftTmp->right = n;
+	leftTmp->parent = n->parent;
+	n->parent = leftTmp;
+
+	if (nIsAleftChild) p->left = leftTmp;
+	else if (nIsArightChild) p->right = leftTmp;
+	else root = leftTmp;
+
+	n->height = 1 + max(getHeight(n->left),getHeight(n->right));
+	leftTmp->height = 1 + max(getHeight(leftTmp->left),getHeight(leftTmp->right));
 }
