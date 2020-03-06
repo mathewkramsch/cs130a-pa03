@@ -64,12 +64,12 @@ pair<node*,bool> bst::deleteVal_helper(int val) {
 
 	bool isAleftChild(false), isArightChild(false);
 	node *p = n->parent;
+	pReturn.first = n->parent;
 	if (p) {
 		if (p->left && p->left->data==val) isAleftChild=true;
 		else isArightChild=true;
-	} else pReturn.first = p;
+	}
 
-	// if no children
 	if (!n->left && !n->right) {  // if no children
 		if (isAleftChild) p->left = nullptr;
 		else if (isArightChild) p->right = nullptr;
@@ -81,12 +81,12 @@ pair<node*,bool> bst::deleteVal_helper(int val) {
 		deleteVal(s->data);
 		n->data = sVal;  // swap values of n and n's successor (not height)
 		return pReturn;
-	} else if (n->left) {  // if 1 child: left (needs height updating)
+	} else if (n->left) {  // if 1 child: left
 		if (isAleftChild) p->left = n->left;
 		else if (isArightChild) p->right = n->left;
 		else root = n->left;
 		n->left->parent = p;
-	} else {  // if 1 child: right (needs height updating)
+	} else {  // if 1 child: right
 		if (isAleftChild) p->left = n->right;
 		else if (isArightChild) p->right = n->right;
 		else root = n->right;
@@ -147,6 +147,7 @@ string bst::print_inorder() const {
 		n = s.top();
 		s.pop();
 		str += to_string(n->data) + " ";  // print leftmost
+		// str += "[" + to_string(n->height) + "] ";  // DELETE THIS
 		n = n->right;  // go to the right
 	}
 	str += "\n";
