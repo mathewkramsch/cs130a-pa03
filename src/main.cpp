@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
 			else cout << a.print();
 			continue; 
 		}
-
 		ss >> num;
 		if (word=="insert") {
 			if (type=="bst") success = b.insert(num);
@@ -54,6 +53,5 @@ int main(int argc, char *argv[]) {
 		cout << mssg << endl;
 		ss >> comma;
 	}
-
 	return 0;
 }

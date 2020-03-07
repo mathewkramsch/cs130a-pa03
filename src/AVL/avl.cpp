@@ -2,7 +2,6 @@
 
 #include "avl.h"
 #include "../utility.h"
-// #include <iostream>  // DELETE, JUST FOR DEBUGGING
 using namespace std;
 
 bool avl::insert(int val) { 
@@ -25,12 +24,8 @@ bool avl::deleteVal(int val) {
 // PRECONDITION: val = to be deleted from avl
 // POSTCONDITION: if val != in avl return false, else delete val & return true
 // tree is balanced after deletion
-
 	pair<node*,bool> p = bst::deleteVal_helper(val);
 	if (!p.second) return false;
-
-	// cout << "DEEPEST NODE TO BE HEIGHT UPDATED: " << p.first->data << endl;	
-
 	heightUpdate(p.first);
 	balance(p.first);
 	return true;
@@ -40,8 +35,6 @@ void avl::heightUpdate(node *n) {
 // PRECONDITION: n is the deepest node in avl in need of height-updating
 // POSTCONDITION: all nodes in tree n-up get +1 height
 	while (n) {
-		// cout << "getHeight(" << n->data << "->left): " << getHeight(n->left) << endl;
-		// cout << "getHeight(" << n->data << "->right): " << getHeight(n->right) << endl;
 		n->height = 1 + max(getHeight(n->left),getHeight(n->right));
 		n = n->parent;
 	}	
@@ -76,13 +69,6 @@ void avl::balance(node *n) {
 void avl::leftRotate(node *n) { 
 // PRECONDTION: n's |balanceFactor| > 1
 // POSTCONDITION: does a left rotation (|balanceFactor| <= 1 not guaranteed)
-	/* 20                30
-	 	\               /  \
-		30   -->      20   40
-	   / \
-		 40
-	*/
-
 	bool nIsAleftChild(false), nIsArightChild(false);
 	node *p = n->parent;
 	if (p) {

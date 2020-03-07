@@ -2,7 +2,6 @@
 
 #include <stack>
 #include "bst.h"
-// #include <iostream>  // DELETE, JUST FOR DEBUGGING
 using namespace std;
 
 bool bst::insert(int val) { 
@@ -57,8 +56,6 @@ pair<node*,bool> bst::deleteVal_helper(int val) {
 // PRECONDITION: val = to be deleted from bst
 // POSTCONDITION: .first: returns deepest node to be height-updated after insert (for avl), or nullptr
 // .second: if val != in bst returns false, else delete val & return true
-
-	// cout << "DELETING: " << val << endl;
 	pair<node*,bool> pReturn(nullptr,false);
 	node *n = access_helper(val, root);
 	if (!n) return pReturn;
@@ -151,9 +148,6 @@ string bst::print_inorder() const {
 		n = s.top();
 		s.pop();
 		str += to_string(n->data) + " ";  // print leftmost
-
-		// str += "[" + to_string(n->height) + "] ";  // DELETE THIS
-
 		n = n->right;  // go to the right
 	}
 	str += "\n";
