@@ -5,8 +5,7 @@ FLAGS=-std=c++11 -Wall -Wextra -Werror
 DEPENDENCIES= src/main.o src/BST/bst.o src/AVL/avl.o
 
 #test: all
-#	./avl "insert 10, insert 20, insert 30, print"
-#	./bst "insert 50, insert 60, insert 40, insert 10, insert 20, insert 15, insert 30, print, delete 40, print, insert 40, insert 70, print"
+#	./avl "insert 45, insert 30, insert 15, print, insert 56, print, insert 62, print, insert 60, print, delete 30, print"
 #	./avl "insert 50, insert 60, insert 40, insert 10, insert 20, insert 15, insert 30, print, delete 40, print, insert 40, insert 70, print"
 
 

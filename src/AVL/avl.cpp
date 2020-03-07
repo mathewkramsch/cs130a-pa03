@@ -2,7 +2,7 @@
 
 #include "avl.h"
 #include "../utility.h"
-#include <iostream>  // DELETE, JUST FOR DEBUGGING
+// #include <iostream>  // DELETE, JUST FOR DEBUGGING
 using namespace std;
 
 bool avl::insert(int val) { 
@@ -17,7 +17,7 @@ bool avl::insert(int val) {
 	node *n = bst::insert_helper(val,root);  // n is the parent of node inserted
 	if (!n) return false;  // if n=nullptr, then val already in avl
 	heightUpdate(n);
-	balance(root);
+	balance(n);
 	return true;
 }
 
@@ -28,8 +28,11 @@ bool avl::deleteVal(int val) {
 
 	pair<node*,bool> p = bst::deleteVal_helper(val);
 	if (!p.second) return false;
+
+	// cout << "DEEPEST NODE TO BE HEIGHT UPDATED: " << p.first->data << endl;	
+
 	heightUpdate(p.first);
-	balance(root);
+	balance(p.first);
 	return true;
 }
 
@@ -37,41 +40,49 @@ void avl::heightUpdate(node *n) {
 // PRECONDITION: n is the deepest node in avl in need of height-updating
 // POSTCONDITION: all nodes in tree n-up get +1 height
 	while (n) {
+		// cout << "getHeight(" << n->data << "->left): " << getHeight(n->left) << endl;
+		// cout << "getHeight(" << n->data << "->right): " << getHeight(n->right) << endl;
 		n->height = 1 + max(getHeight(n->left),getHeight(n->right));
 		n = n->parent;
 	}	
 }
 
 void avl::balance(node *n) { 
-// PRECONDITION: n is the root of a tree/subtree
+// PRECONDITION: n is the deepest node in avl in need of balancing
 // POSTCONDITION: avl tree is balanced: every node's |balance factor| <= 1
 	if (!n) return;
 	int balanceFactor = getBalanceFactor(n);
 	node *tmp =n;
 
-	if (balanceFactor < -1 && n->height < 3) {  // too tall on left side (make sure dont rotate unless w/ leaf)
-		if (getBalanceFactor(n->left) < 0) rightRotate(n);  // left-left case
+	if (balanceFactor < -1) {  // too tall on left side (make sure dont rotate unless w/ leaf)
+		if (getBalanceFactor(n->left) < 0) { rightRotate(n); return; } // left-left case
 		else if (getBalanceFactor(n->left) > 0) {  // left-right case
-			cout << "left-right" << endl;
 			leftRotate(n->left);
 			rightRotate(tmp);
+			return;
 		}
 	}
-	else if (balanceFactor > 1 && n->height < 3) {  // too tall on right side
-		if (getBalanceFactor(n->right) > 0) leftRotate(n);  // right-right case
+	else if (balanceFactor > 1) {  // too tall on right side
+		if (getBalanceFactor(n->right) > 0) { leftRotate(n); return; } // right-right case
 		else if (getBalanceFactor(n->right) < 0) {  // right-left case
-			cout << "right-left" << endl;
 			rightRotate(n->right);
 			leftRotate(tmp);
+			return;
 		}
 	}
-	balance(n->left);
-	balance(n->right);
+	balance(n->parent);
 }
 
 void avl::leftRotate(node *n) { 
 // PRECONDTION: n's |balanceFactor| > 1
 // POSTCONDITION: does a left rotation (|balanceFactor| <= 1 not guaranteed)
+	/* 20                30
+	 	\               /  \
+		30   -->      20   40
+	   / \
+		 40
+	*/
+
 	bool nIsAleftChild(false), nIsArightChild(false);
 	node *p = n->parent;
 	if (p) {
@@ -81,17 +92,17 @@ void avl::leftRotate(node *n) {
 
 	node *rightTmp = n->right;
 
-	n->right = n->right->left;  // may be nullptr
-	rightTmp->left = n;
-	rightTmp->parent = n->parent;
-	n->parent = rightTmp;
-
+	rightTmp->parent = p;
 	if (nIsAleftChild) p->left = rightTmp;
 	else if (nIsArightChild) p->right = rightTmp;
 	else root = rightTmp;
 
-	n->height = 1 + max(getHeight(n->left),getHeight(n->right));
-	rightTmp->height = 1 + max(getHeight(rightTmp->left),getHeight(rightTmp->right));
+	n->right = n->right->left;  // may be nullptr
+	if (n->right) n->right->parent = n;
+	rightTmp->left = n;
+	n->parent = rightTmp;
+
+	heightUpdate(n);
 }
 
 void avl::rightRotate(node *n) { 
@@ -106,15 +117,15 @@ void avl::rightRotate(node *n) {
 
 	node *leftTmp = n->left;
 
-	n->left = n->left->right;  // may be nullptr
-	leftTmp->right = n;
-	leftTmp->parent = n->parent;
-	n->parent = leftTmp;
-
+	leftTmp->parent = p;
 	if (nIsAleftChild) p->left = leftTmp;
 	else if (nIsArightChild) p->right = leftTmp;
 	else root = leftTmp;
 
-	n->height = 1 + max(getHeight(n->left),getHeight(n->right));
-	leftTmp->height = 1 + max(getHeight(leftTmp->left),getHeight(leftTmp->right));
+	n->left = n->left->right;  // may be nullptr
+	if (n->left) n->left->parent = n;
+	leftTmp->right = n;
+	n->parent = leftTmp;
+
+	heightUpdate(n);
 }

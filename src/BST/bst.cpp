@@ -2,7 +2,7 @@
 
 #include <stack>
 #include "bst.h"
-#include <iostream>  // DELETE, JUST FOR DEBUGGING
+// #include <iostream>  // DELETE, JUST FOR DEBUGGING
 using namespace std;
 
 bool bst::insert(int val) { 
@@ -55,8 +55,10 @@ bool bst::deleteVal(int val) {
 }
 pair<node*,bool> bst::deleteVal_helper(int val) {
 // PRECONDITION: val = to be deleted from bst
-// POSTCONDITION: .first: returns first (deepest) node to be height-updated after insert (for avl), or nullptr
+// POSTCONDITION: .first: returns deepest node to be height-updated after insert (for avl), or nullptr
 // .second: if val != in bst returns false, else delete val & return true
+
+	// cout << "DELETING: " << val << endl;
 	pair<node*,bool> pReturn(nullptr,false);
 	node *n = access_helper(val, root);
 	if (!n) return pReturn;
@@ -77,20 +79,22 @@ pair<node*,bool> bst::deleteVal_helper(int val) {
 	} else if (n->left && n->right) {  // if 2 children
 		node *s = findSuccessor(n);  // s must exist since n has 2 children
 		int sVal = s->data;
-		pReturn.first = s->parent;
-		deleteVal(s->data);
+		pReturn.first = deleteVal_helper(s->data).first;
 		n->data = sVal;  // swap values of n and n's successor (not height)
+		pReturn.first = n;
 		return pReturn;
 	} else if (n->left) {  // if 1 child: left
 		if (isAleftChild) p->left = n->left;
 		else if (isArightChild) p->right = n->left;
 		else root = n->left;
 		n->left->parent = p;
+		pReturn.first = n->left;  // return node swapped
 	} else {  // if 1 child: right
 		if (isAleftChild) p->left = n->right;
 		else if (isArightChild) p->right = n->right;
 		else root = n->right;
 		n->right->parent = p;
+		pReturn.first = n->right;
 	}
 	delete n;
 	return pReturn;
@@ -147,7 +151,9 @@ string bst::print_inorder() const {
 		n = s.top();
 		s.pop();
 		str += to_string(n->data) + " ";  // print leftmost
+
 		// str += "[" + to_string(n->height) + "] ";  // DELETE THIS
+
 		n = n->right;  // go to the right
 	}
 	str += "\n";
