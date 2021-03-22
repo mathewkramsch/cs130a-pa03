@@ -1,9 +1,6 @@
-# PA03 for CS130a
-Mathew Kramsch
+# CS 130A Programming Assignment #3
+## Binary Search Tree and AVL Tree Implementation
 
-> Programming Assignment #3 for CS130a: Binary Search Tree and AVL Tree Implementation
-
-
-###### Sample Input:
+Sample Input:
 - ./bst "insert i, access i, delete i, print"
 - ./avl "insert i, access i, delete i, print"
